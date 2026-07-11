@@ -1,0 +1,17 @@
+steps:
+  # 1. ビルド作業ディレクトリを batch フォルダに固定
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'batch'
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/cloudrun/batch:latest', '.']
+
+  # 2. イメージをArtifact RegistryにPush
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'batch'
+    args: ['push', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/cloudrun/batch:latest']
+
+# 保存するイメージを指定
+images:
+  - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/cloudrun/batch:latest'
+
+# タイムアウト設定
+timeout: '600s'

@@ -1,23 +1,18 @@
 steps:
-  # 1. Batchイメージビルド（完全backend同じ構文・相対パス）
+  # build batch image
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'Build Batch Image'
-    args: [
-      'build', 
-      '-t', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/batch-image:latest', 
-      './batch'
-    ]
+    dir: 'batch'
+    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/run/batch:latest', '.']
 
-  # 2. イメージPush
+  # push（使用你已存在的 run 仓库，无需新建）
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'Push Batch Image'
-    args: [
-      'push', 
-      'asia-northeast1-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/batch-image:latest'
-    ]
-
-images:
-  - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/batch-image:latest'
+    dir: 'batch'
+    args: ['push', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/run/batch:latest']
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+images:
+  - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/run/batch:latest'
+
+timeout: '600s'

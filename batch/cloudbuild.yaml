@@ -9,6 +9,11 @@ steps:
     dir: 'batch'
     args: ['push', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/cloudrun/batch:latest']
 
+# ========== 新版GCP必須ログ設定（エラー根治） ==========
+options:
+  logging: CLOUD_LOGGING_ONLY
+# =====================================================
+
 # 保存するイメージを指定
 images:
   - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/cloudrun/batch:latest'

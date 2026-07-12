@@ -1,5 +1,5 @@
 steps:
-  # 1. Batchイメージビルド（batchディレクトリ固定、backendと同じ書き方）
+  # 1. Batchイメージビルド（完全backend同じ構文・相対パス）
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build Batch Image'
     args: [
@@ -8,7 +8,7 @@ steps:
       './batch'
     ]
 
-  # 2. Artifact RegistryにイメージPush
+  # 2. イメージPush
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Push Batch Image'
     args: [
@@ -16,10 +16,8 @@ steps:
       'asia-northeast1-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/batch-image:latest'
     ]
 
-# 保存イメージ登録
 images:
   - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/batch-image:latest'
 
-# 新版GCP必須ログ設定（backendと完全統一）
 options:
   logging: CLOUD_LOGGING_ONLY

@@ -1,22 +1,25 @@
 steps:
-  # 1. ビルド作業ディレクトリを batch フォルダに固定
+  # 1. Batchイメージビルド（batchディレクトリ固定、backendと同じ書き方）
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'batch'
-    args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/cloudrun/batch:latest', '.']
+    id: 'Build Batch Image'
+    args: [
+      'build', 
+      '-t', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/batch-image:latest', 
+      './batch'
+    ]
 
-  # 2. イメージをArtifact RegistryにPush
+  # 2. Artifact RegistryにイメージPush
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'batch'
-    args: ['push', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/cloudrun/batch:latest']
+    id: 'Push Batch Image'
+    args: [
+      'push', 
+      'asia-northeast1-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/batch-image:latest'
+    ]
 
-# ========== 新版GCP必須ログ設定（エラー根治） ==========
+# 保存イメージ登録
+images:
+  - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/batch-image:latest'
+
+# 新版GCP必須ログ設定（backendと完全統一）
 options:
   logging: CLOUD_LOGGING_ONLY
-# =====================================================
-
-# 保存するイメージを指定
-images:
-  - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/cloudrun/batch:latest'
-
-# タイムアウト設定
-timeout: '600s'
